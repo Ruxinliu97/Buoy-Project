@@ -8,7 +8,6 @@ output: pdf_document
 ```{r}
 library(tidyverse)
 library(stringr)
-
 ```
 # Importing the data 
 
@@ -17,51 +16,63 @@ library(stringr)
 url_1 <- "http://www.ndbc.noaa.gov/view_text_file.php?filename=mlrf1h"
 # The second part of the data URL
 url_2 <- ".txt.gz&dir=data/historical/stdmet/"
-# Read the latest 20 years of data
-years <- c(2000:2019)
+# Read the latest available 20 years of data
+years <- c(1999:2018)
 # The complete 20 URLs
 urls <- str_c(url_1, years, url_2, sep = "")
 filenames <- str_c("mr", years, sep = "")
-
 ```
-
-
-## Since the buoy data was collected over years, there were updates and changes on how many variables are measured. During the exploring process, it is found that the data from the year 2000 to 2004 only contained 17 columns, while starting from the year 2005, the data set had one extra column mm, which is the minute variable. Since the mm variable only contained values of 0 and the earlier years didn't have this information available, the mm variable will not be used in the analysis and can be removed from the data.
 
 
 ```{r}
 # Load in the 20-year data from the NDBC website
-# Year 2000 - 2006
-for(i in 1:7){
+# Year 1999 - 2006
+for(i in 1:8){
   suppressMessages(
     # Fill any missing values with NA:
     assign(filenames[i], read.table(urls[i], header = TRUE, fill = TRUE))
   )
   
 }
-
-# Year 2007 - 2019: Column names started with #, which will cause issue
-for(i in 8:20){
+# Year 2007 - 2018: Column names started with #, which will cause issue
+for(i in 9:20){
   suppressMessages(
     # Fill any missing values with NA and use the same column names as year 2006
     assign(filenames[i], read.table(urls[i], header = FALSE, 
                                     fill = TRUE, col.names = colnames(mr2006))),
-   
   )
 
 }
-
 ```
 
-```{r}
 
-```
-
-# Cleaning the data 
+## Since the buoy data was collected over years, there were updates and changes on how many variables are measured. During the exploring process, it is found that the data from the year 1999 only contained 16 columns(without Tide), the year 2000 to 2004 contained 17 columns, while starting from the year 2005, the data included one extra column mm, which is the minute variable. Since the mm variable only contained values of 0 and the earlier years didn't have this information available, the mm variable will not be used in the analysis and can be removed from the data.
 
 
 ```{r}
-
+# Add Column Tide to the 1999 data
+mr1999$TIDE <- NA
+# Delete the mm column
+n <- length(urls)
+for (i in 1:n){
+  file <- get(filenames[i])
+  colnames(file)[1] <-"YYYY"
+  if(ncol(file) == 18){
+    file <- subset(file, select = -mm )
+  }
+  if(i == 1){
+    MR <- file
+  }else{
+    MR <- rbind.data.frame(MR, file)
+  }
+  
+}
 ```
+
+
+# Cleaning and filtering the data 
+
+
+
 
 
