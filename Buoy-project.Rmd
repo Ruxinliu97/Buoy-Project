@@ -70,15 +70,42 @@ for (i in 1:n){
 ```
 
 
-# Cleaning and filtering the data 
+# Cleaning the data 
 
 ## The goal of this project is to find possible evidence of global warming, therefore, the possibly related variables are Air Temperature (ATMP) and Water Temperature (WTMP). So, the other variables could be removed for now. 
 
 ```{r}
-MR_temp <- subset(MR, select = c(YYYY, MM, DD, hh, ATMP, WTMP ))
+MR_temp <- subset(MR, select = c(YYYY, MM, DD, hh, ATMP, WTMP))
 ```
 
+## For the temperature variable, there are many missing values indicated by 999.0 (temperature could not go up to 999), which will cause issues when calculating averages and findind maximun values. Therefore, these points should be substituted by NA.  
 
+```{r}
+MR_temp[MR_temp == 999] <- NA
+```
+
+# Formating the date with lubridate
+
+```{r}
+library(lubridate)
+# Check the type of variables
+sapply(MR_temp, class)
+# Format the year, month and time variables into one single date variable
+MR_temp <- MR_temp %>% 
+  select(YYYY, MM, DD, hh, ATMP, WTMP) %>% 
+  mutate(date = make_datetime(YYYY, MM, DD))
+```
+
+# Filtering the data down to one data point per day (the maximum temperature)
+
+```{r, message = FALSE}
+library(dplyr)
+MR_max <- MR_temp %>% 
+  group_by(date) %>% 
+  # Finding the max and exclude NA
+  summarize(max_ATMP = max(ATMP, na.rm = TRUE), 
+            max_WTMP = max(WTMP, na.rm = TRUE))
+```
 
 
 
