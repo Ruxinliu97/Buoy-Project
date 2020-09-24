@@ -31,14 +31,29 @@ filenames <- str_c("mr", years, sep = "")
 
 ```{r}
 # Load in the 20-year data from the NDBC website
-n <- length(urls)
-for(i in 1:n){
+# Year 2000 - 2006
+for(i in 1:7){
   suppressMessages(
     # Fill any missing values with NA:
     assign(filenames[i], read.table(urls[i], header = TRUE, fill = TRUE))
   )
   
 }
+
+# Year 2007 - 2019: Column names started with #, which will cause issue
+for(i in 8:20){
+  suppressMessages(
+    # Fill any missing values with NA and use the same column names as year 2006
+    assign(filenames[i], read.table(urls[i], header = FALSE, 
+                                    fill = TRUE, col.names = colnames(mr2006))),
+   
+  )
+
+}
+
+```
+
+```{r}
 
 ```
 
