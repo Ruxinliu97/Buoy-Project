@@ -72,6 +72,12 @@ for (i in 1:n){
 
 # Cleaning and filtering the data 
 
+## The goal of this project is to find possible evidence of global warming, therefore, the possibly related variables are Air Temperature (ATMP) and Water Temperature (WTMP). So, the other variables could be removed for now. 
+
+```{r}
+MR_temp <- subset(MR, select = c(YYYY, MM, DD, hh, ATMP, WTMP ))
+```
+
 
 
 
