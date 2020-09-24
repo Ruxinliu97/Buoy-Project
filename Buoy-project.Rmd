@@ -10,4 +10,64 @@ library(tidyverse)
 library(stringr)
 
 ```
+# Importing the data 
+
+```{r}
+# The first part of the data URL
+url_1 <- "http://www.ndbc.noaa.gov/view_text_file.php?filename=mlrf1h"
+# The second part of the data URL
+url_2 <- ".txt.gz&dir=data/historical/stdmet/"
+# Read the latest 20 years of data
+years <- c(2000:2019)
+# The complete 20 URLs
+urls <- str_c(url_1, years, url_2, sep = "")
+filenames <- str_c("mr", years, sep = "")
+
+```
+
+
+## Since the buoy data was collected over years, there were updates and changes on how many variables are measured. During the exploring process, it is found that the data from the year 2000 to 2004 only contained 17 columns, while starting from the year 2005, the data set had one extra column mm, which is the minute variable. Since the mm variable only contained values of 0 and the earlier years didn't have this information available, the mm variable will not be used in the analysis and can be removed from the data.
+```{r}
+###  Read the data from the website
+
+N <- length(urls)
+
+for (i in 1:N){
+  suppressMessages(  ###  This stops the annoying messages on your screen.  Do this last.
+    assign(filenames[i], read_table(urls[i], col_names = TRUE))
+  )
+    
+  file <- get(filenames[i])
+  
+  colnames(file)[1] <-"YYYY"
+  
+  # put '19' in front of 2 digit years
+  # check that all columns are included
+  # filter down to only the 1 daily observation that you want
+  # etc etc etc
+  
+  if(i == 1){
+    MR <- file
+  }
+  
+  else{
+    MR <- rbind.data.frame(MR, file)
+  }
+  
+  
+  
+}
+
+```
+
+# Cleaning the data 
+```{r}
+a <- read_table2("https://www.ndbc.noaa.gov/view_text_file.php?filename=mlrf1h2000.txt.gz&dir=data/historical/stdmet/")
+```
+
+```{r}
+urls
+
+```
+
 
