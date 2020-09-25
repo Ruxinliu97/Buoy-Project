@@ -75,7 +75,7 @@ for (i in 1:n){
 ## The goal of this project is to find possible evidence of global warming, therefore, the possibly related variables are Air Temperature (ATMP) and Water Temperature (WTMP). So, the other variables could be removed for now. 
 
 ```{r}
-MR_temp <- subset(MR, select = c(YYYY, MM, DD, hh, ATMP, WTMP))
+MR_temp <- subset(MR, select = c(YYYY, MM, DD, ATMP, WTMP))
 ```
 
 ## For the temperature variable, there are many missing values indicated by 999.0 (temperature could not go up to 999), which will cause issues when calculating averages and findind maximun values. Therefore, these points should be substituted by NA.  
@@ -84,16 +84,16 @@ MR_temp <- subset(MR, select = c(YYYY, MM, DD, hh, ATMP, WTMP))
 MR_temp[MR_temp == 999] <- NA
 ```
 
-# Formating the date with lubridate
+# Formating the data into posix numbers with lubridate
 
 ```{r}
 library(lubridate)
-# Check the type of variables
-sapply(MR_temp, class)
 # Format the year, month and time variables into one single date variable
 MR_temp <- MR_temp %>% 
-  select(YYYY, MM, DD, hh, ATMP, WTMP) %>% 
+  select(YYYY, MM, DD, ATMP, WTMP) %>% 
   mutate(date = make_datetime(YYYY, MM, DD))
+# The new variable is POSIX number
+is.POSIXt(MR_temp$date)
 ```
 
 # Filtering the data down to one data point per day (the maximum temperature)
@@ -107,5 +107,18 @@ MR_max <- MR_temp %>%
             max_WTMP = max(WTMP, na.rm = TRUE))
 ```
 
+```{r, message = FALSE}
+MR_year_mean <- MR_temp %>% 
+  group_by(YYYY) %>% 
+  # Finding the yearly average temperature and exclude NA
+  summarize(mean_ATMP = mean(ATMP, na.rm = TRUE), 
+            mean_WTMP = mean(WTMP, na.rm = TRUE))
+```
 
+# EDA
+
+```{r}
+plot(MR_year_mean$YYYY, MR_year_mean$mean_ATMP)
+plot(MR_year_mean$YYYY, MR_year_mean$mean_WTMP)
+```
 
