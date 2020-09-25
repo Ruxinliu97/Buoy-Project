@@ -5,27 +5,29 @@ date: "9/24/2020"
 output: pdf_document
 ---
 
-# Introduction -your understanding of the question being addressed, your approach, 
+# Introduction  
 
+  As people are now more and more concerned about our ecosystem, we can easily acquire information about global warming all over the internet. However, even there is clear scientific evidence about this current climate change, a large proportion of the general public may still not believe in this or not realize the severity of this issue (NASA 2020). In this study, the data collected by the National Data Buoy Center (NOAA) from the year 1999 to the year 2018 was explored and analyzed to show evidence of global warming (NDBC 2000).
+    
+    
 # Methodology
+## Data cleaning and variable selection
+  The general approach of this study is to use the 20-year buoy data to perform linear regression models. The reason why the year 1999 to the year 2018 was selected is that the last decade was the warmest since the year 1880 and these were the latest available data on the NDBC website (Climate Hot Map). Since the buoy data was collected over years, there were updates and changes on how many variables are measured. During the exploring process, it is found that the data of the year 1999 only contained 16 columns, from the year 2000 to 2004 there were 17 columns while starting from the year 2005, the data included one more column mm, which was the minute variable. In order to keep consistency throughout different years, the new variables that were added in later years are deleted, since these data were not complete and should not be used in the analysis. 
+  
+  After merging the 20 data sets into a single data frame, only variables YYYY (year), MM (month), DD (day), ATMP (Air Temperature) and WTMP (Water Temperature) are kept, since these are the factors that can show direct evidence of global warming. There were temperature variables in the data with values of 999, which is impossible for a temperature to be. These were assumed to be missing values and were converted to NA first and then were deleted from the data to avoid confusion and miscalculation. All the date-related variables were formatted into POSIX numbers with lubridate package. 
+  
+## Sampling frequency
+  In order to reduce the number of total observations and at the same time keeping all the important information, the sampling frequency was filtered down to one data point per day, which was the maximum temperature of the day. Then, using the daily maximum temperature, the yearly average of maximum temperature was computed and plotted to see any potential general trend for the purpose of Exploratory Data Analysis. Lastly, since the temperatures change a lot in different seasons. The maximum temperature data were further separated into seasons and linear regressions were performed based on the seasonal sub-datasets. The data was collected in Boston, and therefore spring is from March, April and May; summer is from June, July and August; fall is from September, October and November; and the winter is from December, January and February (Kathryn Cirrone 2019).
+  The year variables used in linear regressions were all centered by subtracting the value of 1999, therefore the intercepts can then be interpreted as the average temperature for the first year of the data (year 1999). All the detailed codes and references can be found in the Appendix. 
+  
 
-# Discussion
-
+# Results and Discussion
+  From Fig.1 shown in the Appendix, we can see that the average maximum temperatures fluctuated up and down over the years. However, in the year 2005, the average annual max temperature peaked and after that, the temperature kept staying at a relatively high level. This plot suggested that there may be an increasing trend for the temperature, so linear regressions are fitted to confirm with this conjecture. From Table 1 & 2, the slope coefficients for both air temperature (slope = 0.02090) and water temperature (slope = 0.02090) were positive. However, they are not statistically significant. 
+  For the spring, from Table 3 & 4 the slope coefficients for air temperature (slope = 0.015552) and water temperature (slope = 0.012890) were both positive and significant. For the summer, from Table 5 the slope was positive and significant, which was 0.008529, and from Table 6 the slope was negative but not significant, which was -0.005415. For the fall, from Table 7 the slope was positive and significant, which was 0.018076, and from Table 8 the slope was positive but not significant, which was 0.008436. Lastly for the winter, from Table 9 & 10 the slope coefficients for air temperature (slope = 0.049556) and water temperature (slope = 0.040290) were both positive and very significant.
 # Conclusion
 
-# Code
-
-# Reference
-
-
-```{r, echo=FALSE, fig.align="center"}
-library(ggplot2)
-ggplot(MR_year_mean, aes(YYYY, mean_ATMP)) +
-  geom_point(colour = "orange") +
-  geom_point(data = MR_year_mean, aes(y = mean_WTMP), colour = 'purple') +
-  ggtitle("Yearly Mean Temperature Trend") +
-  labs(y ="Mean Temperature (C)", x = "Year")
-```
+# Appendix
+## Code
 
 ```{r}
 # Loading required packages 
@@ -163,49 +165,105 @@ MR_winter <- MR_max %>%
 
 ## EDA
 
-```{r}
+```{r, warning=FALS, Eecho=FALSE, fig.align="center"}
 library(ggplot2)
-ggplot(MR_year_mean, aes(YYYY, mean_ATMP)) +
+ggplot(MR_year_mean, aes(`year(date)`, mean_ATMP)) +
   geom_point(colour = "orange") +
   geom_point(data = MR_year_mean, aes(y = mean_WTMP), colour = 'purple') +
   ggtitle("Yearly Mean Temperature Trend") +
-  labs(y ="Mean Temperature (C)", x = "Year")
+  labs(y ="Mean Temperature (C)", x = "Year",
+       caption = "Fig.1 The yearly changing trend for maximum temperature")
 ```
 
 ## Analysis
-
+### Table 1
 ```{r}
 # Linear regression Year vs ATMP
 center_year <- MR_year_mean$`year(date)` - 1999
 summary(lm(MR_year_mean$mean_ATMP ~ center_year))
+```
+
+### Table 2
+```{r}
 # Linear regression Year vs WTMP
 summary(lm(MR_year_mean$mean_WTMP ~ center_year))
 ```
 
+### Table 3
 ```{r}
+# Linear regression Year vs spring ATMP
 year_spring <- year(MR_spring$date) - 1999
 summary(lm(max_ATMP ~ year_spring, data = MR_spring))
+
+```
+
+### Table 4
+```{r}
+# Linear regression Year vs spring WTMP
 summary(lm(max_WTMP ~ year_spring, data = MR_spring))
 ```
 
+### Table 5
 ```{r}
 year_summer <- year(MR_summer$date) - 1999
+# Linear regression Year vs summer ATMP
 summary(lm(max_ATMP ~ year_summer, data = MR_summer))
+```
+
+### Table 6
+```{r}
+# Linear regression Year vs summer WTMP
 summary(lm(max_WTMP ~ year_summer, data = MR_summer))
 ```
 
+### Table 7
 ```{r}
 year_fall<- year(MR_fall$date) - 1999
+# Linear regression Year vs fall ATMP
 summary(lm(max_ATMP ~ year_fall, data = MR_fall))
+```
+
+### Table 8
+
+```{r}
+# Linear regression Year vs fall WTMP
 summary(lm(max_WTMP ~ year_fall, data = MR_fall))
 ```
 
-
+### Table 9
 ```{r}
 year_winter <- year(MR_winter$date) - 1999
+# Linear regression Year vs winter ATMP
 summary(lm(max_ATMP ~ year_winter, data = MR_winter))
+```
+
+### Table 10
+```{r}
+# Linear regression Year vs winter WTMP
 summary(lm(max_WTMP ~ year_winter, data = MR_winter))
 ```
 
 
+## Reference of R Packages
+
+1. H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+  Springer-Verlag New York, 2016.
+2. Wickham et al., (2019). Welcome to the tidyverse. Journal of Open
+  Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+3. Hadley Wickham (2019). stringr: Simple, Consistent Wrappers for
+  Common String Operations. R package version 1.4.0.
+  https://CRAN.R-project.org/package=stringr
+4. Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy
+  with lubridate. Journal of Statistical Software, 40(3), 1-25. URL
+  http://www.jstatsoft.org/v40/i03/.
+5. Hadley Wickham, Romain François, Lionel Henry and Kirill Müller
+  (2020). dplyr: A Grammar of Data Manipulation. R package version
+  1.0.2. https://CRAN.R-project.org/package=dplyr
+  
+## Bibliography
+
+1. NASA. (2020). *GLOBAL CLIMATE CHANGE* [online]. Available from: https://climate.nasa.gov/evidence/ [accessed 25 September 2020].
+2. NDBC. (2000). *Station 44013* [online]. Available from: https://www.ndbc.noaa.gov/station_page.php?station=44013 [accessed 25 September 2020].
+3. Climate Hot Map. *GLOBAL WARMING EFFECTS AROUND THE WORLD* Available from: https://www.climatehotmap.org/global-warming-effects/air-temperature.html [accessed 25 September 2020].
+4. Kathryn Cirrone. (2019). *Trip Savvy* [online]. Available from: https://www.tripsavvy.com/weather-in-boston-climate-seasons-average-monthly-temperature-4177628 [accessed 25 September 2020].
 
