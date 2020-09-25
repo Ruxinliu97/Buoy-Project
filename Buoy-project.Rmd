@@ -120,7 +120,7 @@ MR_temp <- na.omit(MR_temp)
 
 ## Formating the data into posix numbers with lubridate
 
-```{r, results = "hide}
+```{r}
 library(lubridate)
 # Format the year, month and time variables into one single date variable
 MR_temp <- MR_temp %>% 
@@ -172,7 +172,7 @@ MR_winter <- MR_max %>%
 
 ## EDA
 
-```{r, warning=FALS, Eecho=FALSE, fig.align="center"}
+```{r, warning=FALSE, Echo=FALSE, fig.align="center"}
 library(ggplot2)
 ggplot(MR_year_mean, aes(`year(date)`, mean_ATMP)) +
   geom_point(colour = "orange") +
