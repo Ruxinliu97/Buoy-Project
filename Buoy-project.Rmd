@@ -148,18 +148,19 @@ MR_spring <- MR_max %>%
 
 ```{r, message = FALSE, warning = FALSE}
 MR_summer <- MR_max %>% 
-  filter(month(date) %in% c(3, 4, 5)) 
+  filter(month(date) %in% c(6, 7, 8)) 
 ```
 
 ```{r, message = FALSE, warning = FALSE}
 MR_fall <- MR_max %>% 
-  filter(month(date) %in% c(3, 4, 5)) 
+  filter(month(date) %in% c(9, 10, 11)) 
 ```
 
 ```{r, message = FALSE, warning = FALSE}
 MR_winter <- MR_max %>% 
-  filter(month(date) %in% c(3, 4, 5)) 
+  filter(month(date) %in% c(12, 1, 2)) 
 ```
+
 ## EDA
 
 ```{r}
@@ -182,11 +183,29 @@ summary(lm(MR_year_mean$mean_WTMP ~ center_year))
 ```
 
 ```{r}
-lm(max ~ year(date), data = MR_spring)
+year_spring <- year(MR_spring$date) - 1999
+summary(lm(max_ATMP ~ year_spring, data = MR_spring))
+summary(lm(max_WTMP ~ year_spring, data = MR_spring))
+```
+
+```{r}
+year_summer <- year(MR_summer$date) - 1999
+summary(lm(max_ATMP ~ year_summer, data = MR_summer))
+summary(lm(max_WTMP ~ year_summer, data = MR_summer))
+```
+
+```{r}
+year_fall<- year(MR_fall$date) - 1999
+summary(lm(max_ATMP ~ year_fall, data = MR_fall))
+summary(lm(max_WTMP ~ year_fall, data = MR_fall))
 ```
 
 
-``
+```{r}
+year_winter <- year(MR_winter$date) - 1999
+summary(lm(max_ATMP ~ year_winter, data = MR_winter))
+summary(lm(max_WTMP ~ year_winter, data = MR_winter))
+```
 
 
 
