@@ -30,23 +30,95 @@ output: pdf_document
   different years, the new variables that were added in later years are deleted,
   since these data were not complete and should not be used in the analysis. 
   
-  After merging the 20 data sets into a single data frame, only variables YYYY (year), MM (month), DD (day), ATMP (Air Temperature) and WTMP (Water Temperature) are kept, since these are the factors that can show direct evidence of global warming. There were temperature variables in the data with values of 999, which is impossible for a temperature to be. These were assumed to be missing values and were converted to NA first and then were deleted from the data to avoid confusion and miscalculation. All the date-related variables were formatted into POSIX numbers with lubridate package (Hadley Wickham & Garrett Grolemund 2016). 
+  After merging the 20 data sets into a single data frame, only variables YYYY 
+  (year), MM (month), DD (day), ATMP (Air Temperature) and WTMP (Water Temperature) 
+  are kept, since these are the factors that can show direct evidence of global 
+  warming. There were temperature variables in the data with values of 999, which 
+  is impossible for a temperature to be. These were assumed to be missing values
+  and were converted to NA first and then were deleted from the data to avoid 
+  confusion and miscalculation. All the date-related variables were formatted 
+  into POSIX numbers with lubridate package (Hadley Wickham & Garrett Grolemund 
+  2016). 
   
 ### Sampling frequency
-  In order to reduce the number of total observations and at the same time keeping all the important information, the sampling frequency was filtered down to one data point per day, which was the maximum temperature of the day. The reason why using maximum temperature instead of the average temperature was that average values could possibly hide some outliers in the data while the maximum value could capture them. Global warming itself is an unusual speeding event on the temperature, so it is better to look for extreme values in the data. Then, using the daily maximum temperature, the yearly average of maximum temperature was computed and plotted to see any potential general trend for the purpose of Exploratory Data Analysis. Lastly, since the temperatures change a lot in different seasons. The maximum temperature data were further separated into seasons and linear regressions were performed based on the seasonal sub-datasets. The data was collected in Boston, and therefore spring is from March to May; summer is from June to August; fall is from September to November; and the winter is from December to February (Kathryn Cirrone 2019).
-  The year variables used in linear regressions were all centered by subtracting the value of 1999, therefore the intercepts can then be interpreted as the average temperature for the first year of the data (year 1999). All the detailed codes and references can be found in the Appendix. 
+  In order to reduce the number of total observations and at the same time 
+  keeping all the important information, the sampling frequency was filtered
+  down to one data point per day, which was the maximum temperature of the day.
+  The reason why using maximum temperature instead of the average temperature was
+  that average values could possibly hide some outliers in the data while the
+  maximum value could capture them. Global warming itself is an unusual speeding 
+  event on the temperature, so it is better to look for extreme values in the data. 
+  Then, using the daily maximum temperature, the yearly average of maximum 
+  temperature was computed and plotted to see any potential general trend for 
+  the purpose of Exploratory Data Analysis. Lastly, since the temperatures change
+  a lot in different seasons. The maximum temperature data were further separated 
+  into seasons and linear regressions were performed based on the seasonal sub-datasets.
+  The data was collected in Boston, and therefore spring is from March to May; 
+  summer is from June to August; fall is from September to November; and the 
+  winter is from December to February (Kathryn Cirrone 2019).
+  
+  The year variables used in linear regressions were all centered by subtracting 
+  the value of 1999, therefore the intercepts can then be interpreted as the 
+  average temperature for the first year of the data (year 1999). All the detailed
+  codes and references can be found in the Appendix. 
   
 
 # Results and Discussion
-  From Fig.1 shown in the Appendix, we can see that the average maximum temperatures fluctuated up and down over the years. However, in the year 2005, the average annual max temperature peaked and after that, the temperature kept staying at a relatively high level. This plot suggested that there may be an increasing trend for the temperature, so linear regressions were fitted to confirm with this conjecture. From Table 1 & 2, the slope coefficients for both air temperature (slope = 0.02090) and water temperature (slope = 0.02090) were positive. However, they were not statistically significant. 
-  For the spring, from Table 3 & 4 the slope coefficients for air temperature (slope = 0.015552) and water temperature (slope = 0.012890) were both positive and significant. For the summer, from Table 5 the slope was positive and significant, which was 0.008529, and from Table 6 the slope was negative but not significant, which was -0.005415. For the fall, from Table 7 the slope was positive and significant, which was 0.018076, and from Table 8 the slope was positive but not significant, which was 0.008436. Lastly for the winter, from Table 9 & 10 the slope coefficients for air temperature (slope = 0.049556) and water temperature (slope = 0.040290) were both positive and very significant.
-  Since the intercept of the regression models all corresponded to the average maximum temperature in the first year of this data, which didn't provide much useful information. However, the slope coefficients were very useful.The positive slopes suggested that with 1 unit of increase in years, the annual maximum temperature on average will increase by the amount of the coefficient. Out of the 10 linear models, there was only one producing a negative slope. The values of R-squared for the models were relatively small, but they were sufficient to provide some evidence. By looking at linear regressions only, the results showed that the temperature will increase with the increase of years. Although the values of slopes seem to be very small, it actually meant a lot when putting back to the content. For example, the slope coefficient for maximum air temperature in spring is only 0.015552. This means that after 100 years, the maximum temperature in spring is predicted to increase by 1.5 degree celsius. This number is scary because all living organisms on the earth are very sensitive to temperature and 100-years is a very short period for the ecosystem. Therefore, this amount of increase can be detrimental.  
+  From Fig.1 shown in the Appendix, we can see that the average maximum 
+  temperatures fluctuated up and down over the years. However, in the year 2005,
+  the average annual max temperature peaked and after that, the temperature kept
+  staying at a relatively high level. This plot suggested that there may be an
+  increasing trend for the temperature, so linear regressions were fitted to 
+  confirm with this conjecture. From Table 1 & 2, the slope coefficients for 
+  both air temperature (slope = 0.02090) and water temperature (slope = 0.02090)
+  were positive. However, they were not statistically significant. 
+  
+  For the spring, from Table 3 & 4 the slope coefficients for air temperature 
+  (slope = 0.015552) and water temperature (slope = 0.012890) were both positive 
+  and significant. For the summer, from Table 5 the slope was positive and 
+  significant, which was 0.008529, and from Table 6 the slope was negative 
+  but not significant, which was -0.005415. For the fall, from Table 7 the slope
+  was positive and significant, which was 0.018076, and from Table 8 the slope 
+  was positive but not significant, which was 0.008436. Lastly for the winter, 
+  from Table 9 & 10 the slope coefficients for air temperature (slope = 0.049556)
+  and water temperature (slope = 0.040290) were both positive and very significant.
+  
+  Since the intercept of the regression models all corresponded to the average 
+  maximum temperature in the first year of this data, which didn't provide much
+  useful information. However, the slope coefficients were very useful.The 
+  positive slopes suggested that with 1 unit of increase in years, the annual
+  maximum temperature on average will increase by the amount of the coefficient.
+  Out of the 10 linear models, there was only one producing a negative slope. 
+  The values of R-squared for the models were relatively small, but they were 
+  sufficient to provide some evidence. By looking at linear regressions only, 
+  the results showed that the temperature will increase with the increase of
+  years. Although the values of slopes seem to be very small, it actually meant
+  a lot when putting back to the content. For example, the slope coefficient 
+  for maximum air temperature in spring is only 0.015552. This means that after 
+  100 years, the maximum temperature in spring is predicted to increase by 1.5 
+  degree celsius. This number is scary because all living organisms on the earth
+  are very sensitive to temperature and 100-years is a very short period for the 
+  ecosystem. Therefore, this amount of increase can be detrimental.  
   
   
 # Conclusion
 
-  In conclusion, all linear regression models in this study showed a positive slope coefficient, except for one. And many of the coefficients also showed significance, which made the results more reliable. These results concluded that both maximum air temperature and maximum water temperature will increase through time. Although there could be better models than simple linear regressions and there might be many assumptions and insights into the data that were not taking account in this study, it could at least suggest that there is some evidence of global warming in the data only collected by a single weather buoy at a single location. Therefore, even given the inevitable issues of this data, the results still showed pretty good evidence and confirmed that global warming is happening.
-  For future studies, a large dataset and a longer time span could be used to fit a more accurate and convincing model. Also, the time series model could be performed to forecast future temperatures. Global warming is actually happening and everyone is responsible for trying to alleviate it.
+  In conclusion, all linear regression models in this study showed a positive 
+  slope coefficient, except for one. And many of the coefficients also showed 
+  significance, which made the results more reliable. These results concluded 
+  that both maximum air temperature and maximum water temperature will increase
+  through time. Although there could be better models than simple linear 
+  regressions and there might be many assumptions and insights into the data 
+  that were not taking account in this study, it could at least suggest that 
+  there is some evidence of global warming in the data only collected by a 
+  single weather buoy at a single location. Therefore, even given the inevitable
+  issues of this data, the results still showed pretty good evidence and confirmed
+  that global warming is happening.
+  
+  For future studies, a large dataset and a longer time span could be used to 
+  fit a more accurate and convincing model. Also, the time series model could 
+  be performed to forecast future temperatures. Global warming is actually 
+  happening and everyone is responsible for trying to alleviate it.
   
 
 # Appendix
